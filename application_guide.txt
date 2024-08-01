@@ -1,0 +1,45 @@
+
+# Entidades
+
+-> Employee
+-> Company
+-> Product
+
+# Atributos
+
+| Employee
+    - _id: String
+    - name: String
+    - email: String
+    - password: String
+    - company_id: String
+
+| Company
+    - _id: String
+    - name: String
+    - description: String
+    - cnpj: String
+    - contacts: {
+        "principal_email": String, 
+        "second_email": String?, 
+
+        "principal_phone_number": String,
+        "second_phone_number": String?,
+
+        "principal_cellphone_number": String,
+        "second_cellphone_number": String
+    }
+    - address: {
+        "street": String
+        "street_number": Int,
+        "neighborhood": String,
+        "state": String,
+        "zip": String
+    }
+
+| Product
+    - _id: String
+    - name: String
+    - description: String
+    - price: Float
+    - quantity_in_stock: Int

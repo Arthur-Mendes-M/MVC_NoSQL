@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  employees Employee[]
+  products Product[]
+  name String
+  description String
+  cnpj String @unique
+  
+  address Address
+  contacts Contacts
+
+  @@map("companies")
+
+  @@unique([contacts.principal_email, contacts.second_email, contacts.principal_phone_number, contacts.second_phone_number, contacts.principal_cellphone_number, contacts.second_cellphone_number])
+}
+
+model Employee {
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  name String
+  email String @unique
+  password String
+  
+  company Company @relation(fields: [company_id], references: [id])
+  company_id String @db.ObjectId
+
+  @@map("employees")
+}
+
+model Product {
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  name String
+  description String
+  price Float
+  quantity_in_stock Int
+
+  company Company @relation(fields: [company_id], references: [id])
+  company_id String @db.ObjectId
+
+  @@map("products")
+}
+
+type Address {
+  street String
+  street_number Int
+  neighborhood String
+  state String
+  zip String
+}
+
+type Contacts {
+  principal_email String
+  second_email String?
+
+  principal_phone_number String
+  second_phone_number String?
+
+  principal_cellphone_number String
+  second_cellphone_number String?
+}
